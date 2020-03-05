@@ -2,10 +2,45 @@
 ### Do not make changes to this file directly
 
 
+input BooleanFilter {
+  equals: Boolean
+  not: Boolean
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: Int
+  notIn: [Int!]
+}
+
 type Mutation {
   createDraft(authorEmail: String!, content: String, title: String!): Post!
   publish(postId: Int!): Post
   signupUser(email: String, name: String): User!
+}
+
+input NullableStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+enum OrderByArg {
+  asc
+  desc
 }
 
 type Post {
@@ -16,15 +51,68 @@ type Post {
   title: String!
 }
 
+input PostFilter {
+  every: PostWhereInput
+  none: PostWhereInput
+  some: PostWhereInput
+}
+
+input PostOrderByInput {
+  content: OrderByArg
+  id: OrderByArg
+  published: OrderByArg
+  title: OrderByArg
+}
+
+input PostWhereInput {
+  AND: [PostWhereInput!]
+  author: UserWhereInput
+  content: NullableStringFilter
+  id: IntFilter
+  NOT: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  published: BooleanFilter
+  title: StringFilter
+}
+
+input PostWhereUniqueInput {
+  id: Int
+}
+
 type Query {
   feed: [Post!]!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: PostOrderByInput, skip: Int, where: PostWhereInput): [Post!]!
   user(id: Int!): User
   users: [User!]!
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: String
+  notIn: [String!]
+  startsWith: String
 }
 
 type User {
   email: String!
   id: Int!
   name: String
-  posts: [Post!]!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, skip: Int): [Post!]!
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  email: StringFilter
+  id: IntFilter
+  name: NullableStringFilter
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  posts: PostFilter
 }

@@ -1,46 +1,39 @@
 import { queryType, makeSchema, stringArg, objectType, intArg, mutationType } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 import { PrismaClient } from '@prisma/client'
+import { nexusPrismaPlugin } from 'nexus-prisma'
 
 const prisma = new PrismaClient()
 
 const User = objectType({
   name: 'User',
   definition(t) {
-    t.int('id')
-    t.string('name', { nullable: true })
-    t.string('email')
-    t.field('posts', {
-      list: true,
-      type: 'Post',
-      resolve: parent => {
-        return prisma.user.findOne({
-          where: { id: parent.id }
-        }).posts()
-      }
-    })
+    t.model.id()
+    t.model.name()
+    t.model.email()
+    t.model.posts()
   },
 })
+
 const Post = objectType({
   name: 'Post',
   definition(t) {
-    t.int('id')
-    t.string('title')
-    t.string('content', { nullable: true })
-    t.boolean('published')
-    t.field('author', {
-      type: 'User',
-      resolve: parent => {
-        return prisma.post.findOne({
-          where: { id: parent.id }
-        }).author()
-      }
-    })
+    t.model.id()
+    t.model.title()
+    t.model.content()
+    t.model.published()
+    t.model.author()
   },
 })
 
 const Query = queryType({
   definition(t) {
+    t.crud.posts({ 
+      pagination: true,
+      filtering: true,
+      ordering: true
+    })
+
     t.field('users', {
       type: 'User',
       list: true,
@@ -133,9 +126,16 @@ const Mutation = mutationType({
 
 const schema = makeSchema({
   types: [Query, Mutation, User, Post],
+  plugins: [nexusPrismaPlugin()],
   outputs: {
     schema: __dirname + '/../schema.graphql',
-    typegen: __dirname + '/generated/types.ts'
+    typegen: __dirname + '/generated/types.ts',
+  },
+  typegenAutoConfig: {
+    sources: [{
+      alias: 'prisma',
+      source: '@prisma/client'
+    }]
   }
 })
 
