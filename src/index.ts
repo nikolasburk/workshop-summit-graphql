@@ -13,6 +13,16 @@ const User = objectType({
   }
 })
 
+const Post = objectType({
+  name: 'Post',
+  definition(t) {
+    t.int('id')
+    t.string('title')
+    t.string('content', { nullable: true })
+    t.boolean('published')
+  }
+})
+
 const Query = queryType({
   definition(t) {
     t.field('users', {
@@ -32,6 +42,16 @@ const Query = queryType({
       resolve: (_, args) => {
         return prisma.user.findOne({
           where: { id: args.id }
+        })
+      }
+    })
+
+    t.field('feed', {
+      type: 'Post',
+      list: true,
+      resolve: () => {
+        return prisma.post.findMany({
+          where: { published: true }
         })
       }
     })
@@ -55,12 +75,48 @@ const Mutation = mutationType({
         })
       }
     })
+
+    t.field('createDraft', {
+      type: 'Post',
+      args: {
+        title: stringArg({ nullable: false }),
+        content: stringArg(),
+        authorEmail: stringArg({ nullable: false }),
+      },
+      resolve: (_, args) => {
+        return prisma.post.create({
+          data: {
+            title: args.title,
+            content: args.content,
+            author: {
+              connect: {
+                email: args.authorEmail,
+              },
+            },
+          },
+        })
+      },
+    })
+
+    t.field('publish', {
+      type: 'Post',
+      nullable: true,
+      args: {
+        postId: intArg({ nullable: false }),
+      },
+      resolve: (_, args) => {
+        return prisma.post.update({
+          where: { id: args.postId },
+          data: { published: true },
+        })
+      },
+    })
   }
 })
 
 
 const schema = makeSchema({
-  types: [Query, Mutation, User],
+  types: [Query, Mutation, User, Post],
   outputs: {
     schema: __dirname + '/../schema.graphql',
     typegen: __dirname + '/generated/types.ts'
