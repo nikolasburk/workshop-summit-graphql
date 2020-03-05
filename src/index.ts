@@ -1,6 +1,16 @@
 import { queryType, makeSchema, stringArg, objectType } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 
+const users = [{
+  id: 1,
+  name: "Alice",
+  email: "alice@prisma.io"
+}, {
+  id: 2,
+  name: "Bob",
+  email: "bob@prisma.io"
+}]
+
 const User = objectType({
   name: 'User',
   definition(t) {
@@ -12,10 +22,10 @@ const User = objectType({
 
 const Query = queryType({
   definition(t) {
-    t.field('hello', {
-      type: 'String',
-      args: { name: stringArg() },
-      resolve: (_, args) => `Hello ${args.name || "Nexus"}`
+    t.field('users', {
+      type: 'User',
+      list: true,
+      resolve: () => users
     })
   }
 })
