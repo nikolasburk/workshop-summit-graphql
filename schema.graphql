@@ -5,3 +5,9 @@
 type Query {
   hello(name: String): String!
 }
+
+type User {
+  email: String!
+  id: Int!
+  name: String!
+}
