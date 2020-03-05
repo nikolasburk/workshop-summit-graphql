@@ -9,13 +9,13 @@ This repository contains the starter kit as well as solutions to the tasks of th
 Clone this repository:
 
 ```
-git clone git@github.com:nikolasburk/hello-nexus.git --depth=1
+git clone git@github.com:nikolasburk/workshop-summit-graphql.git --depth=1
 ```
 
 Install npm dependencies:
 
 ```
-cd hello-nexus
+cd workshop-summit-graphql
 npm install
 ```
 
