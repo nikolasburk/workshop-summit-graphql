@@ -1,7 +1,7 @@
 // Data source: SQLite
 datasource sqlite {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url = "***"
 }
 
 // Generated assets: Prisam Client
