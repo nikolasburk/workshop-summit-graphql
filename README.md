@@ -19,7 +19,6 @@ cd workshop-summit-graphql
 npm install
 ```
 
-
 ### 2. Start the GraphQL server
 
 Launch your GraphQL server with this command:
