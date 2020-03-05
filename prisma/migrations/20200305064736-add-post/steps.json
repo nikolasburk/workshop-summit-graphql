@@ -107,17 +107,6 @@
       "field": "posts",
       "type": "Post",
       "arity": "List"
-    },
-    {
-      "tag": "DeleteDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "User",
-          "field": "email"
-        },
-        "directive": "unique"
-      }
     }
   ]
 }
