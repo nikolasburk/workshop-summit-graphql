@@ -1,11 +1,12 @@
-import { queryType, makeSchema } from 'nexus'
+import { queryType, makeSchema, stringArg } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 
 const Query = queryType({
   definition(t) {
     t.field('hello', {
       type: 'String',
-      resolve: () => "Hello Nexus"
+      args: { name: stringArg() },
+      resolve: (_, args) => `Hello ${args.name || "Nexus"}`
     })
   }
 })
