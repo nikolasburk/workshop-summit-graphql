@@ -1,15 +1,8 @@
 import { queryType, makeSchema, stringArg, objectType, intArg, mutationType } from 'nexus'
 import { ApolloServer } from 'apollo-server'
+import { PrismaClient } from '@prisma/client'
 
-const users = [{
-  id: 1,
-  name: "Alice",
-  email: "alice@prisma.io"
-}, {
-  id: 2,
-  name: "Bob",
-  email: "bob@prisma.io"
-}]
+const prisma = new PrismaClient()
 
 const User = objectType({
   name: 'User',
@@ -25,7 +18,9 @@ const Query = queryType({
     t.field('users', {
       type: 'User',
       list: true,
-      resolve: () => users
+      resolve: () => {
+        return prisma.user.findMany()
+      }
     })
 
     t.field('user', {
@@ -35,7 +30,9 @@ const Query = queryType({
         id: intArg({ required: true })
       },
       resolve: (_, args) => {
-        return users.find(u => u.id === args.id)
+        return prisma.user.findOne({
+          where: { id: args.id }
+        })
       }
     })
   }
@@ -50,17 +47,17 @@ const Mutation = mutationType({
         email: stringArg()
       },
       resolve: (_, args) => {
-        const newUser = {
-          id: users.length+1,
-          name: args.name,
-          email: args.email
-        }
-        users.push(newUser)
-        return newUser
+        return prisma.user.create({
+          data: {
+            name: args.name,
+            email: args.email
+          }
+        })
       }
     })
   }
 })
+
 
 const schema = makeSchema({
   types: [Query, Mutation, User],
