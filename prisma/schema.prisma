@@ -1,0 +1,17 @@
+// Data source: SQLite
+datasource sqlite {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Generated assets: Prisam Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Data model definition (mapped to database schema)
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  email String  @unique
+}
