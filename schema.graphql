@@ -20,6 +20,8 @@ input IntFilter {
 
 type Mutation {
   createDraft(authorEmail: String!, content: String, title: String!): Post!
+  deletePost(where: PostWhereUniqueInput!): Post
+  deleteUser(where: UserWhereUniqueInput!): User
   publish(postId: Int!): Post
   signupUser(email: String, name: String): User!
 }
@@ -115,4 +117,9 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
   posts: PostFilter
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: Int
 }
