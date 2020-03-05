@@ -50,6 +50,6 @@ For each task, there's a decidacted "solution-branch". Here's an overview of all
 - [`solution-7`](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-7)
 - [`solution-8`](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-8)
 - [`solution-9`](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-9)
-- **[`solution-10`**](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-10)
+- [**`solution-10`**](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-10)
 - [`solution-11`](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-11)
 - [`solution-12`](https://github.com/nikolasburk/workshop-summit-graphql/tree/solution-12)
