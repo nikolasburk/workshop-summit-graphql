@@ -1,4 +1,4 @@
-import { queryType, makeSchema, stringArg, objectType, intArg } from 'nexus'
+import { queryType, makeSchema, stringArg, objectType, intArg, mutationType } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 
 const users = [{
@@ -41,8 +41,29 @@ const Query = queryType({
   }
 })
 
+const Mutation = mutationType({
+  definition(t) {
+    t.field('signupUser', {
+      type: 'User',
+      args: {
+        name: stringArg(),
+        email: stringArg()
+      },
+      resolve: (_, args) => {
+        const newUser = {
+          id: users.length+1,
+          name: args.name,
+          email: args.email
+        }
+        users.push(newUser)
+        return newUser
+      }
+    })
+  }
+})
+
 const schema = makeSchema({
-  types: [Query, User],
+  types: [Query, Mutation, User],
   outputs: {
     schema: __dirname + '/../schema.graphql',
     typegen: __dirname + '/generated/types.ts'
