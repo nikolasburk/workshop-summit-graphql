@@ -8,11 +8,19 @@ const User = objectType({
   name: 'User',
   definition(t) {
     t.int('id')
-    t.string('name')
+    t.string('name', { nullable: true })
     t.string('email')
-  }
+    t.field('posts', {
+      list: true,
+      type: 'Post',
+      resolve: parent => {
+        return prisma.user.findOne({
+          where: { id: parent.id }
+        }).posts()
+      }
+    })
+  },
 })
-
 const Post = objectType({
   name: 'Post',
   definition(t) {
@@ -20,7 +28,15 @@ const Post = objectType({
     t.string('title')
     t.string('content', { nullable: true })
     t.boolean('published')
-  }
+    t.field('author', {
+      type: 'User',
+      resolve: parent => {
+        return prisma.post.findOne({
+          where: { id: parent.id }
+        }).author()
+      }
+    })
+  },
 })
 
 const Query = queryType({
